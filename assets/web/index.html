@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<script src="./hls.js"></script>
+<script src="./player.js"></script>
+<body>
+  <!-- <div style="width: 100vw; height: 100vh;background: black;"></div> -->
+  <div id="dplayer"></div>
+</body>
+<script>
+  const dp = new DPlayer({
+    container: document.getElementById('dplayer'),
+    video: {
+        url: 'https://youku.cdn3-okzy.com/20200925/13260_6202a3f1/index.m3u8',
+        type: 'hls',
+    },
+    pluginOptions: {
+        hls: {
+            // hls config
+        },
+    },
+});
+</script>
+</html>
