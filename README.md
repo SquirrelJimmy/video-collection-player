@@ -1,16 +1,7 @@
-# h_player_flutter
+# video-collection-player
+网络视频采集播放器，自行提供可访问的rss视频源
+# 说明
+旨在flutter学习交流，本软件不提供任何视频信息，所有视频均是使用者自行获取，与作者无关，🚫🚘，不要提任何与技术无关的话题
 
-A new Flutter project.
+本软件只是本人在休息时做的一个玩具，第一次玩flutter，欢迎批评指正，大家一起学习flutter
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
