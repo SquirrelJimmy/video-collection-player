@@ -24,6 +24,7 @@ class VideoCard extends StatelessWidget {
         return Card(
           clipBehavior: Clip.antiAlias,
           child: Container(
+            padding: EdgeInsets.only(bottom: 15),
             child: Stack(
               children: [
                 GestureDetector(
@@ -31,18 +32,27 @@ class VideoCard extends StatelessWidget {
                   child:  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CachedNetworkImage(
-                        placeholder: (context, url) => Image.asset(
-                          'assets/images/bg.jpg',
+                      Expanded(
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => Image.asset(
+                            'assets/images/bg.jpg',
+                            width: 290,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          imageUrl: _video.pic,
+                          fit: BoxFit.cover,
                           width: 290,
                           height: 200,
-                          fit: BoxFit.cover,
                         ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                        imageUrl: _video.pic,
-                        fit: BoxFit.cover,
-                        width: 290,
-                        height: 200,
+                        // child: Image.asset(
+                        //   'assets/images/bg.jpg',
+                        //   width: 290,
+                        //   height: 200,
+                        //   fit: BoxFit.cover,
+                        // ),
+                        // child: Image.network(_video.pic),
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 10, left: 10, right: 10),

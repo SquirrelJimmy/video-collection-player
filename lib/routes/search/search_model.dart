@@ -34,6 +34,7 @@ class SearchModel {
           ParseXmlToModel.xmlSearchToModel(xmlListData.toString());
       var xmlVideoData;
       List<VideoCardType> videoList = [];
+      videoSearchState.setLoding(true);
       if (xmlResultModel.videoIdList.length > 0) {
         xmlVideoData = await HHttpClient(
           context,
@@ -51,8 +52,6 @@ class SearchModel {
       videoSearchState.loading = false;
       videoSearchState.setPagination(xmlResultModel.pagination);
       videoSearchState.setVideoList(videoList);
-      // videoCardState.setVideoList(videoList);
-      // paginationState.setPagination(xmlResultModel.pagination);
     } catch (e) {
       videoSearchState.setLoding(false);
 

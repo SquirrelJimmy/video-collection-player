@@ -1,0 +1,137 @@
+PODS:
+  - BIJKPlayer (0.7.8)
+  - DKImagePickerController/Core (4.3.2):
+    - DKImagePickerController/ImageDataManager
+    - DKImagePickerController/Resource
+  - DKImagePickerController/ImageDataManager (4.3.2)
+  - DKImagePickerController/PhotoGallery (4.3.2):
+    - DKImagePickerController/Core
+    - DKPhotoGallery
+  - DKImagePickerController/Resource (4.3.2)
+  - DKPhotoGallery (0.0.17):
+    - DKPhotoGallery/Core (= 0.0.17)
+    - DKPhotoGallery/Model (= 0.0.17)
+    - DKPhotoGallery/Preview (= 0.0.17)
+    - DKPhotoGallery/Resource (= 0.0.17)
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Core (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Preview
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Model (0.0.17):
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Preview (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Resource
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Resource (0.0.17):
+    - SDWebImage
+    - SwiftyGif
+  - fijkplayer (0.8.7):
+    - BIJKPlayer (~> 0.7.8)
+    - Flutter
+  - file_picker (0.0.1):
+    - DKImagePickerController/PhotoGallery
+    - Flutter
+  - Flutter (1.0.0)
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - orientation (0.0.1):
+    - Flutter
+  - path_provider (0.0.1):
+    - Flutter
+  - screen (0.0.1):
+    - Flutter
+  - SDWebImage (5.9.2):
+    - SDWebImage/Core (= 5.9.2)
+  - SDWebImage/Core (5.9.2)
+  - shared_preferences (0.0.1):
+    - Flutter
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
+  - SwiftyGif (5.3.0)
+  - Toast (4.0.0)
+  - video_player (0.0.1):
+    - Flutter
+  - wakelock (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - fijkplayer (from `.symlinks/plugins/fijkplayer/ios`)
+  - file_picker (from `.symlinks/plugins/file_picker/ios`)
+  - Flutter (from `Flutter`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - orientation (from `.symlinks/plugins/orientation/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - screen (from `.symlinks/plugins/screen/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - video_player (from `.symlinks/plugins/video_player/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
+
+SPEC REPOS:
+  trunk:
+    - BIJKPlayer
+    - DKImagePickerController
+    - DKPhotoGallery
+    - FMDB
+    - SDWebImage
+    - SwiftyGif
+    - Toast
+
+EXTERNAL SOURCES:
+  fijkplayer:
+    :path: ".symlinks/plugins/fijkplayer/ios"
+  file_picker:
+    :path: ".symlinks/plugins/file_picker/ios"
+  Flutter:
+    :path: Flutter
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  orientation:
+    :path: ".symlinks/plugins/orientation/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  screen:
+    :path: ".symlinks/plugins/screen/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+  video_player:
+    :path: ".symlinks/plugins/video_player/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
+
+SPEC CHECKSUMS:
+  BIJKPlayer: 464bcb8d263331228758bfa34b45d00f399c9fb8
+  DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d
+  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
+  fijkplayer: 0c8728bf3b222203e1fddb08f6899719d88b2b6d
+  file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  orientation: 6c9203efe86ce4cff379756910f18b2d745628c3
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  screen: abd91ca7bf3426e1cc3646d27e9b2358d6bf07b0
+  SDWebImage: 0b42b8719ab0c5257177d5894306e8a336b21cbb
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
+  SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
+  wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.9.3

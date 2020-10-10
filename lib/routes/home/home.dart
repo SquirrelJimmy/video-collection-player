@@ -45,15 +45,18 @@ class _HomePageRouteState extends State<HomePageRoute> {
     _controller.dispose();
   }
 
+  void _controllerListener() {
+    onTypeSwitch(_controller.index);
+
+  }
+
   void initLoad() async {
     _homePageState = HomePageState(context);
     await _homePageState.getXmlData();
     final videoTypeState = Provider.of<VideoTypeState>(context, listen: false);
     _controller = TabController(
         length: videoTypeState.list.length, vsync: ScrollableState());
-    _controller.addListener(() {
-      onTypeSwitch(_controller.index);
-    });
+    _controller.addListener(_controllerListener);
   }
 
   void onDrawTap(VideoSourceType value) async {
@@ -87,12 +90,13 @@ class _HomePageRouteState extends State<HomePageRoute> {
     await _homePageState.getXmlData(queryParameters: {});
 
     final videoTypeState = Provider.of<VideoTypeState>(context, listen: false);
+    if(_controller != null) {
+      _controller.removeListener(_controllerListener);
+      _controller.animateTo(0);
+    }
     _controller = TabController(
         length: videoTypeState.list.length, vsync: ScrollableState());
-    _controller.addListener(() {
-      onTypeSwitch(_controller.index);
-    });
-    _controller.animateTo(0);
+    _controller.addListener(_controllerListener);
   }
 
   Function getData;
@@ -320,29 +324,27 @@ class _HomePageRouteState extends State<HomePageRoute> {
   }
 
   void onTypeSwitch(int index) async {
-    setState(() {
-      _paginationPos = -100;
-    });
     final VideoTypeState videoTypeState =
-        Provider.of<VideoTypeState>(context, listen: false);
+    Provider.of<VideoTypeState>(context, listen: false);
     if (videoTypeState.list[index].id == videoTypeState.currentVideoType.id)
       return;
     final VideoCardState videoCardState =
-        Provider.of<VideoCardState>(context, listen: false);
+    Provider.of<VideoCardState>(context, listen: false);
     videoCardState.setLoading(true);
     HomePageState.toSwitchVideoType(context, videoTypeState.list[index]);
     final homeModel = HomePageState(context);
-    final Map<String, dynamic> params =
-        videoTypeState.currentVideoType.id == '-9999'
-            ? {}
-            : {
-                'pg': 1,
-                't': videoTypeState.currentVideoType.id,
-              };
+    final Map<String, dynamic> params = {
+      'pg': 1,
+      't': videoTypeState.currentVideoType.id,
+    };
+    await Future.value([setState(() {
+      _paginationPos = -100;
+    })]);
     await homeModel.getXmlData(queryParameters: params);
-    setState(() {
+    await Future.delayed(Duration(milliseconds: 200)).then((value) => setState(() {
       _paginationPos = 0;
-    });
+    }));
+
   }
 
   Widget tabBar() {
@@ -351,7 +353,7 @@ class _HomePageRouteState extends State<HomePageRoute> {
       controller: _controller,
       isScrollable: true,
       tabs: videoTypeState.list.map((e) => HomeTab(tab: e)).toList(),
-      onTap: (value) => onTypeSwitch(value),
+      // onTap: (value) => onTypeSwitch(value),
     );
   }
 }

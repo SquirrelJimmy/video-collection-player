@@ -58,44 +58,68 @@ class _SearchState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(_pagonation.pagecount);
     return Scaffold(
       appBar: AppBar(
         title: Text('${_source.name}'),
       ),
       body: SafeArea(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: _screenSize.width,
-            maxHeight: _screenSize.height,
-          ),
-          child: Stack(
-            children: [
-              _buildContent(),
-              _searchBar(),
-              _list.length > 0
-                  ? Positioned(
-                      bottom: 0,
-                      child: Container(
-                        height: 50,
-                        alignment: Alignment.center,
-                        color: Colors.white,
-                        child: PaginationControl(
-                          page: _pagonation.page,
-                          maxPage: _pagonation.pagecount,
-                          toNextPage: _model.toNextPage,
-                          toPrevPage: _model.toPrevPage,
-                          toFirstPage: _model.toFirstPage,
-                          toLastPage: _model.toLastPage,
-                          toSkipPage: (page) =>
-                              _model.toSkipPage(int.parse(page)),
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: _screenSize.width,
+              maxHeight: _screenSize.height,
+            ),
+            child: Stack(
+              children: [
+                // _buildContent(),
+                // _searchBar(),
+                Container(
+                  padding: EdgeInsets.only(top: 0, left: 12, right: 12, bottom: 60),
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      SliverPersistentHeader(
+                        floating: true,
+                        delegate: SliverSearchBar(
+                          child: _searchBar(),
                         ),
                       ),
-                    )
-                  : Container(),
-            ],
+                      _buildContent(),
+                      // SliverGrid.count(crossAxisCount: null),
+
+                    ],
+                  ),
+                ),
+                _list.length > 0
+                    ? Positioned(
+                  bottom: 0,
+                  child: Container(
+                    height: 50,
+                    alignment: Alignment.center,
+                    color: Colors.white,
+                    child: PaginationControl(
+                      page: _pagonation.page,
+                      maxPage: _pagonation.pagecount,
+                      toNextPage: _model.toNextPage,
+                      toPrevPage: _model.toPrevPage,
+                      toFirstPage: _model.toFirstPage,
+                      toLastPage: _model.toLastPage,
+                      toSkipPage: (page) =>
+                          _model.toSkipPage(int.parse(page)),
+                    ),
+                  ),
+                )
+                    : Container(),
+              ],
+            ),
           ),
         ),
+
+
       ),
     );
   }
@@ -106,26 +130,28 @@ class _SearchState extends State<SearchPage> {
       height: 50,
       // color: Colors.red,
       margin: EdgeInsets.only(top: 10),
-      alignment: Alignment.topCenter,
+      // alignment: Alignment.topCenter,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 200),
         width: _screenSize.width * 0.9,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Color.fromRGBO(142, 142, 147, .15),
+          color: Color.fromRGBO(238, 238, 238, 1),
         ),
         child: Padding(
           padding: EdgeInsets.only(left: 10, right: 10),
           child: Theme(
             child: TextField(
               keyboardType: TextInputType.text,
-              // autofocus: true,
               controller: _controller,
+              textInputAction: TextInputAction.search,
+              textAlignVertical: TextAlignVertical.center,
               decoration: new InputDecoration(
                 hintText: '输入搜索关键字',
+
                 icon: Icon(Icons.search),
                 border: InputBorder.none,
-                suffix: GestureDetector(
+                suffixIcon: GestureDetector(
                   onTap: () {
                     _controller.clear();
                   },
@@ -148,27 +174,53 @@ class _SearchState extends State<SearchPage> {
 
   Widget _buildContent() {
     if (_loading) {
-      return Center(
-        child: LoadingBouncingGrid.circle(
-          backgroundColor: Theme.of(context).primaryColor,
-        ),
+      return SliverGrid.count(
+        crossAxisCount: 1,
+        children: [
+          Center(
+            child: LoadingBouncingGrid.circle(
+            backgroundColor: Theme.of(context).primaryColor),
+          ),
+        ],
       );
     } else if (_list.length != 0) {
-      return Container(
-        margin: EdgeInsets.only(top: 70),
-        child: GridView.extent(
-          controller: _scrollController,
-          padding: EdgeInsets.only(top: 12, left: 12, right: 12, bottom: 60),
+      return SliverGrid.extent(
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
           maxCrossAxisExtent: 290.0,
           childAspectRatio: 0.5,
           children:
-              _list.map((e) => VideoCard(key: Key(e.id), video: e)).toList(),
-        ),
+          _list.map((e) => VideoCard(key: Key(e.id), video: e)).toList()
       );
     } else {
+      return  SliverGrid.count(
+        crossAxisCount: 1,
+        children: [
+          Empty(),
+        ],
+      );
       return Empty();
     }
+  }
+}
+
+
+class SliverSearchBar extends SliverPersistentHeaderDelegate {
+
+  SliverSearchBar({this.child});
+  Widget child;
+  @override
+  double get maxExtent => 80.0;
+
+  @override
+  double get minExtent => 65.0;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) =>
+      false; // 如果内容需要更新，设置为true
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return  this.child;
   }
 }

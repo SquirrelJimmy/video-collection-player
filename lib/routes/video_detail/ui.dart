@@ -505,11 +505,11 @@ class __FijkPanel2State extends State<FijkPanel2> {
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildBack(context),
+              player.value.fullScreen ? buildBack(context) : Text(''),
               Expanded(
                 child: Container(
                   // alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 2),
+                  padding: EdgeInsets.only(bottom: 2, left: player.value.fullScreen ? 0 : 46),
                   child: Text(
                     widget.title ?? '',
                     style: TextStyle(
@@ -639,6 +639,10 @@ class __FijkPanel2State extends State<FijkPanel2> {
                   valueColor: AlwaysStoppedAnimation(_color)),
             ),
           ) : Text(''),
+          player.value.fullScreen ? Text('') : Positioned(
+            top: -11,
+            child: buildBack(context),
+          ),
         ],
       ),
     );

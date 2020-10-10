@@ -20,6 +20,7 @@ class VideoSearchState extends ChangeNotifier {
 
   void setLoding(bool load) {
     loading = load;
+    notifyListeners();
   }
 
   void setPagination(Pagination p) {
