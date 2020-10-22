@@ -46,7 +46,8 @@ class PaginationControl extends StatefulWidget {
 
 class _PaginationControl extends State<PaginationControl> {
   TextEditingController _textEditingController = TextEditingController();
-  bool isShowText = false;
+  OverlayEntry _inputOverlayEntry;
+  // final FocusScopeNode _focusScopeNode = FocusScopeNode();
 
   @override
   void initState() {
@@ -56,8 +57,9 @@ class _PaginationControl extends State<PaginationControl> {
 
   @override
   void dispose() {
-    super.dispose();
+    // _focusScopeNode.dispose();
     _textEditingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,7 +68,6 @@ class _PaginationControl extends State<PaginationControl> {
       padding: EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.center,
-      // color: Colors.red,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -79,7 +80,10 @@ class _PaginationControl extends State<PaginationControl> {
               color: Colors.white,
               size: 22,
             ),
-            onTap: widget.toFirstPage,
+            onTap: () {
+              if (widget.page == 1) return;
+              widget.toFirstPage();
+            },
           ),
           PaginationControl.radiusButton(
             context: context,
@@ -90,23 +94,24 @@ class _PaginationControl extends State<PaginationControl> {
               color: Colors.white,
               size: 22,
             ),
-            onTap: widget.toPrevPage,
+            onTap: () {
+              if (widget.page == 1) return;
+              widget.toPrevPage();
+            },
           ),
           Container(
             width: 100,
             alignment: Alignment.center,
-            child: isShowText
-                ? inputBuild()
-                : GestureDetector(
-                    onTap: () => _toggleInput(),
-                    child: Text(
-                      '${widget.page}/${widget.maxPage}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+            child: GestureDetector(
+              onTap: () => _toggleInput(),
+              child: Text(
+                '${widget.page}/${widget.maxPage}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
           PaginationControl.radiusButton(
             context: context,
@@ -117,7 +122,10 @@ class _PaginationControl extends State<PaginationControl> {
               color: Colors.white,
               size: 22,
             ),
-            onTap: widget.toNextPage,
+            onTap: () {
+              if (widget.page == widget.maxPage) return;
+              widget.toNextPage();
+            },
           ),
           PaginationControl.radiusButton(
             context: context,
@@ -128,24 +136,67 @@ class _PaginationControl extends State<PaginationControl> {
               color: Colors.white,
               size: 22,
             ),
-            onTap: widget.toLastPage,
+            onTap: () {
+              if (widget.page == widget.maxPage) return;
+              widget.toLastPage();
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget inputBuild() {
-    return TextField(
-      keyboardType: TextInputType.number,
-      textAlign: TextAlign.center,
-      controller: _textEditingController,
-      autofocus: true,
-      onSubmitted: _onSubmitted,
-    );
+  inputBuild() {
+    _inputOverlayEntry = OverlayEntry(builder: (context) {
+      return Scaffold(
+        backgroundColor: Color(0x00000000),
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            _inputOverlayEntry.remove();
+            _inputOverlayEntry = null;
+          },
+          child: ConstrainedBox(
+            constraints: BoxConstraints.expand(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    color: Color(0xFFFFFFFF),
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    child: FocusScope(
+                      // autofocus: true,
+                      child: TextField(
+                        autofocus: true,
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        controller: _textEditingController,
+                        onSubmitted: _onSubmitted,
+                        textInputAction: TextInputAction.go,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+    Overlay.of(context).insert(_inputOverlayEntry);
   }
 
   _onSubmitted(String value) {
+    if (widget.page.toString() == value) {
+      _inputOverlayEntry.remove();
+      _inputOverlayEntry = null;
+      return;
+    }
     int intValue = int.parse(value);
     if (intValue >= widget.maxPage) {
       intValue = widget.maxPage;
@@ -156,15 +207,14 @@ class _PaginationControl extends State<PaginationControl> {
     }
     _textEditingController.text = '$intValue';
     widget.toSkipPage != null ? widget.toSkipPage(value) : null;
-    setState(() {
-      isShowText = false;
-    });
+    _inputOverlayEntry.remove();
+    _inputOverlayEntry = null;
   }
 
   _toggleInput() {
     setState(() {
       _textEditingController.text = '${widget.page}';
-      isShowText = !isShowText;
     });
+    inputBuild();
   }
 }

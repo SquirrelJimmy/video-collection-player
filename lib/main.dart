@@ -13,11 +13,11 @@ void main() {
           ChangeNotifierProvider.value(value: VideoTypeState()),
           ChangeNotifierProvider.value(value: VideoSearchState()),
         ],
-        child: MyApp(),
+        child: CollectionApp(),
       )));
 }
 
-class MyApp extends StatelessWidget {
+class CollectionApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeModel themeModel = Provider.of<ThemeModel>(context);

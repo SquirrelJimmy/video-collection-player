@@ -47,7 +47,6 @@ class _HomePageRouteState extends State<HomePageRoute> {
 
   void _controllerListener() {
     onTypeSwitch(_controller.index);
-
   }
 
   void initLoad() async {
@@ -60,10 +59,14 @@ class _HomePageRouteState extends State<HomePageRoute> {
   }
 
   void onDrawTap(VideoSourceType value) async {
+    final VideoTypeState videoTypeState =
+        Provider.of<VideoTypeState>(context, listen: false);
+
     final VideoSourceState videoSourceState =
         Provider.of<VideoSourceState>(context, listen: false);
     final videoCardState = Provider.of<VideoCardState>(context, listen: false);
     if (videoSourceState.currentSouce.id == value.id) return;
+    videoTypeState.setList([]);
     videoCardState.setLoading(true);
 
     _homePageState = HomePageState(context);
@@ -90,7 +93,7 @@ class _HomePageRouteState extends State<HomePageRoute> {
     await _homePageState.getXmlData(queryParameters: {});
 
     final videoTypeState = Provider.of<VideoTypeState>(context, listen: false);
-    if(_controller != null) {
+    if (_controller != null) {
       _controller.removeListener(_controllerListener);
       _controller.animateTo(0);
     }
@@ -169,7 +172,7 @@ class _HomePageRouteState extends State<HomePageRoute> {
         Provider.of<PaginationState>(context);
     final VideoSourceState videoSourceState =
         Provider.of<VideoSourceState>(context);
-    if (videoTypeState.list.length == 0) {
+    if (videoTypeState.list.length == 1) {
       return Scaffold(
         appBar: AppBar(
           title: Text(title),
@@ -181,6 +184,11 @@ class _HomePageRouteState extends State<HomePageRoute> {
                   backgroundColor: Theme.of(context).primaryColor,
                 )
               : uploadLayout(),
+        ),
+        drawer: Drawer(
+          child: VideoTypeList(
+            onTap: (value) => onDrawTap(value),
+          ),
         ),
       );
     }
@@ -210,15 +218,13 @@ class _HomePageRouteState extends State<HomePageRoute> {
           ),
           Container(
             padding: EdgeInsets.only(right: 16),
-            child:
-                actiondBtn(
-                    color: Colors.white, size: 20,
-                    icon: Icons.favorite,
-                  onPress: () {
-                    Navigator.pushNamed(context, 'collection');
-                  }
-                ),
-
+            child: actiondBtn(
+                color: Colors.white,
+                size: 20,
+                icon: Icons.favorite,
+                onPress: () {
+                  Navigator.pushNamed(context, 'collection');
+                }),
           ),
         ],
         bottom: tabBar(),
@@ -325,26 +331,30 @@ class _HomePageRouteState extends State<HomePageRoute> {
 
   void onTypeSwitch(int index) async {
     final VideoTypeState videoTypeState =
-    Provider.of<VideoTypeState>(context, listen: false);
+        Provider.of<VideoTypeState>(context, listen: false);
     if (videoTypeState.list[index].id == videoTypeState.currentVideoType.id)
       return;
     final VideoCardState videoCardState =
-    Provider.of<VideoCardState>(context, listen: false);
+        Provider.of<VideoCardState>(context, listen: false);
     videoCardState.setLoading(true);
     HomePageState.toSwitchVideoType(context, videoTypeState.list[index]);
     final homeModel = HomePageState(context);
-    final Map<String, dynamic> params = {
-      'pg': 1,
-      't': videoTypeState.currentVideoType.id,
-    };
-    await Future.value([setState(() {
-      _paginationPos = -100;
-    })]);
+    final Map<String, dynamic> params = index == 0
+        ? {}
+        : {
+            'pg': 1,
+            't': videoTypeState.currentVideoType.id,
+          };
+    await Future.value([
+      setState(() {
+        _paginationPos = -100;
+      })
+    ]);
     await homeModel.getXmlData(queryParameters: params);
-    await Future.delayed(Duration(milliseconds: 200)).then((value) => setState(() {
-      _paginationPos = 0;
-    }));
-
+    await Future.delayed(Duration(milliseconds: 200))
+        .then((value) => setState(() {
+              _paginationPos = 0;
+            }));
   }
 
   Widget tabBar() {

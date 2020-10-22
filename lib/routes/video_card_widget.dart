@@ -4,16 +4,42 @@ import 'package:provider/provider.dart';
 
 import '../index.dart';
 
-class VideoCard extends StatelessWidget {
+class VideoCard extends StatefulWidget {
   VideoCard({Key key, VideoCardType video, this.onToggleCollection}) {
     _video = video;
   }
   Function onToggleCollection;
   VideoCardType _video;
+  @override
+  _VideoCard createState() => _VideoCard();
+}
+
+class _VideoCard extends State<VideoCard> {
+  Image _image;
+  String _httpUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _image = Image.network(widget._video.pic);
+    final resolve = _image.image.resolve(ImageConfiguration.empty);
+    resolve.addListener(
+      ImageStreamListener((_, __) {},
+          onError: (dynamic exception, StackTrace stackTrace) {
+        //加载失败
+        if (exception.toString().contains('CERTIFICATE_VERIFY_FAILED')) {
+          setState(() {
+            _httpUrl = widget._video.pic.replaceAll(RegExp('https'), 'http');
+          });
+        }
+      }),
+    );
+  }
+
   void _toPlay(BuildContext context) {
     VideoCardState videoCardState =
         Provider.of<VideoCardState>(context, listen: false);
-    videoCardState.setCurrentVideo(_video);
+    videoCardState.setCurrentVideo(widget._video);
     Navigator.pushNamed(context, 'video');
   }
 
@@ -29,7 +55,7 @@ class VideoCard extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => _toPlay(context),
-                  child:  Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
@@ -40,8 +66,9 @@ class VideoCard extends StatelessWidget {
                             height: 200,
                             fit: BoxFit.cover,
                           ),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                          imageUrl: _video.pic,
+                          // errorBuilder: (context, url, error) =>
+                          //     Icon(Icons.error),
+                          imageUrl: _httpUrl ?? widget._video.pic,
                           fit: BoxFit.cover,
                           width: 290,
                           height: 200,
@@ -57,7 +84,7 @@ class VideoCard extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.only(top: 10, left: 10, right: 10),
                         child: Text(
-                          _video.name,
+                          widget._video.name,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           softWrap: true,
@@ -77,7 +104,7 @@ class VideoCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         text: Text(
-                          _video.type,
+                          widget._video.type,
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -94,7 +121,7 @@ class VideoCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         text: Text(
-                          _video.last.split(" ")[0],
+                          widget._video.last.split(" ")[0],
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -107,9 +134,16 @@ class VideoCard extends StatelessWidget {
                   top: -5,
                   right: -5,
                   child: IconButton(
-                    onPressed: () { collotionState.setCollection(_video); if(onToggleCollection != null) {onToggleCollection();} },
+                    onPressed: () {
+                      collotionState.setCollection(widget._video);
+                      if (widget.onToggleCollection != null) {
+                        widget.onToggleCollection();
+                      }
+                    },
                     icon: Icon(
-                      collotionState.idList.contains(_video.id) ? Icons.favorite : Icons.favorite_border,
+                      collotionState.idList.contains(widget._video.id)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
@@ -120,7 +154,6 @@ class VideoCard extends StatelessWidget {
         );
       },
     );
-
   }
 }
 

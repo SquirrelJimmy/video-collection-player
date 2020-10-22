@@ -78,7 +78,8 @@ class _SearchState extends State<SearchPage> {
                 // _buildContent(),
                 // _searchBar(),
                 Container(
-                  padding: EdgeInsets.only(top: 0, left: 12, right: 12, bottom: 60),
+                  padding:
+                      EdgeInsets.only(top: 0, left: 12, right: 12, bottom: 60),
                   child: CustomScrollView(
                     controller: _scrollController,
                     slivers: [
@@ -90,36 +91,33 @@ class _SearchState extends State<SearchPage> {
                       ),
                       _buildContent(),
                       // SliverGrid.count(crossAxisCount: null),
-
                     ],
                   ),
                 ),
                 _list.length > 0
                     ? Positioned(
-                  bottom: 0,
-                  child: Container(
-                    height: 50,
-                    alignment: Alignment.center,
-                    color: Colors.white,
-                    child: PaginationControl(
-                      page: _pagonation.page,
-                      maxPage: _pagonation.pagecount,
-                      toNextPage: _model.toNextPage,
-                      toPrevPage: _model.toPrevPage,
-                      toFirstPage: _model.toFirstPage,
-                      toLastPage: _model.toLastPage,
-                      toSkipPage: (page) =>
-                          _model.toSkipPage(int.parse(page)),
-                    ),
-                  ),
-                )
+                        bottom: 0,
+                        child: Container(
+                          height: 50,
+                          alignment: Alignment.center,
+                          color: Colors.white,
+                          child: PaginationControl(
+                            page: _pagonation.page,
+                            maxPage: _pagonation.pagecount,
+                            toNextPage: _model.toNextPage,
+                            toPrevPage: _model.toPrevPage,
+                            toFirstPage: _model.toFirstPage,
+                            toLastPage: _model.toLastPage,
+                            toSkipPage: (page) =>
+                                _model.toSkipPage(int.parse(page)),
+                          ),
+                        ),
+                      )
                     : Container(),
               ],
             ),
           ),
         ),
-
-
       ),
     );
   }
@@ -148,7 +146,6 @@ class _SearchState extends State<SearchPage> {
               textAlignVertical: TextAlignVertical.center,
               decoration: new InputDecoration(
                 hintText: '输入搜索关键字',
-
                 icon: Icon(Icons.search),
                 border: InputBorder.none,
                 suffixIcon: GestureDetector(
@@ -179,7 +176,7 @@ class _SearchState extends State<SearchPage> {
         children: [
           Center(
             child: LoadingBouncingGrid.circle(
-            backgroundColor: Theme.of(context).primaryColor),
+                backgroundColor: Theme.of(context).primaryColor),
           ),
         ],
       );
@@ -190,10 +187,9 @@ class _SearchState extends State<SearchPage> {
           maxCrossAxisExtent: 290.0,
           childAspectRatio: 0.5,
           children:
-          _list.map((e) => VideoCard(key: Key(e.id), video: e)).toList()
-      );
+              _list.map((e) => VideoCard(key: Key(e.id), video: e)).toList());
     } else {
-      return  SliverGrid.count(
+      return SliverGrid.count(
         crossAxisCount: 1,
         children: [
           Empty(),
@@ -204,9 +200,7 @@ class _SearchState extends State<SearchPage> {
   }
 }
 
-
 class SliverSearchBar extends SliverPersistentHeaderDelegate {
-
   SliverSearchBar({this.child});
   Widget child;
   @override
@@ -220,7 +214,8 @@ class SliverSearchBar extends SliverPersistentHeaderDelegate {
       false; // 如果内容需要更新，设置为true
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return  this.child;
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return this.child;
   }
 }

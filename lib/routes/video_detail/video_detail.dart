@@ -5,8 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:h_player_flutter/widgets/configurable_expansion_tile.dart';
 import 'package:h_player_flutter/widgets/pagination.dart';
 import 'package:provider/provider.dart';
+import '../../widgets/video_player/player.dart';
 import '../../index.dart';
-import 'h_video_player.dart';
 
 class VideoDetail extends StatefulWidget {
   @override
@@ -59,11 +59,17 @@ class _VideoDetail extends State<VideoDetail> {
           child: SafeArea(
             child: Stack(
               children: [
-                HVideoPlayer(
+                FPlayer(
                   url: playSource.source,
-                  poster: videoInfo.pic,
+                  autoPlay: false,
                   title: '${videoInfo.name} ${playSource.name}',
+                  poster: videoInfo.pic,
                 ),
+                // HVideoPlayer(
+                //   url: playSource.source,
+                //   poster: videoInfo.pic,
+                //   title: '${videoInfo.name} ${playSource.name}',
+                // ),
                 Container(
                   padding: EdgeInsets.only(top: screenSize.width * 9 / 16),
                   child: ListView(

@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:xml2json/xml2json.dart';
-import 'package:xml/xml.dart';
 
 import '../index.dart';
 
@@ -63,7 +61,8 @@ class ParseXmlToModel {
           List<Map<String, dynamic>>.from(classListIterable)
               .map((json) => VideoType.fromJson({
                     'id': json['id'].toString(),
-                    'label': json['\$t'],
+                    'label': (json['\$t'] as String)
+                        .replaceAll(RegExp('\{.+\}'), ''),
                   }))
               .toList();
       final Pagination pagination = Pagination.fromJson(paginationMap);
@@ -89,7 +88,10 @@ class ParseXmlToModel {
       _xml.parse(xmlString);
       var gDataJson = _xml.toParker();
       var value = jsonDecode(
-        gDataJson.replaceAll("\\\"", "'").replaceAll(r'\', '').replaceAll(RegExp('<[^>]+>'), ''),
+        gDataJson
+            .replaceAll("\\\"", "'")
+            .replaceAll(r'\', '')
+            .replaceAll(RegExp('<[^>]+>'), ''),
       );
 
       final Iterable videoListIterable =

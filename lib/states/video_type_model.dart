@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import '../index.dart';
 
 class VideoTypeState extends ChangeNotifier {
-  List<VideoType> list = [];
+  VideoTypeState() {
+    list = [initalType];
+  }
+  List<VideoType> list;
   VideoType currentVideoType = VideoType.fromJson({
     'id': '-9999',
     'label': '全部',
